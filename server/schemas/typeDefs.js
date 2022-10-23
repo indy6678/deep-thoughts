@@ -37,8 +37,12 @@ const typeDefs = gql`
   }
   type Mutation {
     # login() and addUser() mutations return a User object as defined above
+    # updated to return the Auth object
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
+    addThought(thoughtText: String!): Thought
+    addReaction(thoughtId: ID!, reactionBody: String!): Thought
+    addFriend(friendId: ID!): User
   }
 #   auth type returns a token and can optionally include any other user data
   type Auth {
