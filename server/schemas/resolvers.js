@@ -1,5 +1,7 @@
 // these are the functions tied to the query or mutation type def (perform the CRUD actions)
+const {AuthenticationError} = require('apollo-server-express')
 const { User, Thought } = require('../models');
+const {signToken} = require('../utils/auth')
 
 // const resolvers = {
 //     Query: {
@@ -13,6 +15,14 @@ const { User, Thought } = require('../models');
 
 const resolvers = {
     Query: {
+        me: async (parent, args) => {
+            const userData = await User.findOne({})
+            .select('-__v -password')
+            .populate('thoughts')
+            .populate('friends');
+
+            return userData;
+        },
         // series of methods
         // get all thoughts
         // pass in parent as placeholder to access second argument
@@ -43,6 +53,36 @@ const resolvers = {
                 .select('-__v -password')
                 .populate('friends')
                 .populate('thoughts');
+        }
+    }, 
+    Mutation: {
+        // Mongoose User model creates new user in db with whatever is passed in as the args
+        addUser: async (parent, args) => {
+            const user = await User.create(args);
+            // add code to sign a token
+            const token = signToken(user);
+
+            // add code to return token
+            return {token, user};
+            // return user;
+        },
+        login: async (parent, { email, password}) => {
+            const user = await User.findOne({ email });
+
+            if(!user) {
+                throw new AuthenticationError("Incorrect credentials")
+            }
+
+            const correctPw = await user.isCorrectPassword(password);
+            
+            if (!correctPw) {
+                throw new AuthenticationError('Incorrect credentials')
+            }
+
+            // add code to sign a token
+            const token = signToken(user);
+            // return user;
+            return {token, user};
         }
     }
 }

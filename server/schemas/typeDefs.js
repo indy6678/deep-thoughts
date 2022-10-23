@@ -28,10 +28,22 @@ const typeDefs = gql`
     friends: [User]
   }
   type Query {
+    me: User
+    # these are 4 separate queries
     thoughts(username: String): [Thought] # allows us to query with or without username parameter, returning an array of thoughts
     thought(_id: ID!): Thought
     users: [User]
     user(username: String!): User # ! means the data must exist for us to query
+  }
+  type Mutation {
+    # login() and addUser() mutations return a User object as defined above
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+  }
+#   auth type returns a token and can optionally include any other user data
+  type Auth {
+    token: ID!
+    user: User
   }
 `;
 
