@@ -2,6 +2,7 @@ import React from "react";
 
 // ThoughtList will receive two props
 const ThoughtList = ({ thoughts, title}) => {
+    // checks to see if thoughts array contains data
     if(!thoughts.length) {
         return <h3>No Thoughts Yet</h3>;
     }

@@ -7,7 +7,7 @@ import ThoughtList from '../components/ThoughtList';
 const Home = () => {
 
   // use useQuery hook to make query request upon home component load (async)
-  const {loading, data}= useQuery(QUERY_THOUGHTS);
+  const { loading, data } = useQuery(QUERY_THOUGHTS);
   // optional chaining; if data exists, store it in the thoughts constant we just created. If data is undefined, then save an empty array to the thoughts component.
   const thoughts = data?.thoughts || [];
   console.log(thoughts);
@@ -21,7 +21,7 @@ const Home = () => {
           ) : (
             <ThoughtList thoughts={thoughts} title="Some Feed for Thought(s)..." />
           )}
-          </div>
+        </div>
       </div>
     </main>
   );
